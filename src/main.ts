@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { HttpExceptionFilter } from './shared/exception-filters/http-exception.filter';
 
 declare const module: {
   hot: { accept: () => void; dispose: (callback: () => void) => void };
@@ -12,6 +13,8 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
   app.enableCors();
+
+  app.useGlobalFilters(new HttpExceptionFilter(logger));
 
   app.useGlobalPipes(
     new ValidationPipe({
