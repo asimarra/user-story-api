@@ -45,4 +45,9 @@ export class MongooseUserRepository extends UserEntityRepository {
       updatedAt: user.updatedAt,
     }));
   }
+
+  async create(user: UserEntity): Promise<string | null> {
+    const createdUser = await this.UserModel.create(user);
+    return (createdUser._id as string).toString() ?? null;
+  }
 }

@@ -26,5 +26,6 @@ import { FindAllUserUseCase } from './application/find-all-users.usecase';
       useExisting: MongooseUserRepository,
     },
   ],
+  exports: [MongooseModule],
 })
 export class UserModule {}
