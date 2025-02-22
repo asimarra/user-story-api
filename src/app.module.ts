@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import environmentConfig from './config/environments.config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { UserModule } from './contexts/users/user.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     }),
 
     // Modules
+    UserModule,
   ],
   controllers: [],
   providers: [],
