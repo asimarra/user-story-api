@@ -5,12 +5,14 @@ import { MongooseUserRepository } from '../users/infrastructure/repositories/mon
 import { UserEntityRepository } from '../users/domain/user.repository.interface';
 
 import { UserModule } from '../users/user.module';
+import { LoginUseCase } from './application/login.usecase';
 
 @Module({
   imports: [UserModule],
   controllers: [AuthController],
   providers: [
     SignUpUseCase,
+    LoginUseCase,
     MongooseUserRepository,
     {
       provide: UserEntityRepository,
