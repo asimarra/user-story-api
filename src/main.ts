@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
-import { HttpExceptionFilter } from '@shared/exception-filters/http-exception.filter';
+import { HttpExceptionFilter } from '@shared/infrastructure/exception-filters/http-exception.filter';
 
 declare const module: {
   hot: { accept: () => void; dispose: (callback: () => void) => void };

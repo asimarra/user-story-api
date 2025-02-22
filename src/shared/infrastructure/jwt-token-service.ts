@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config';
-import { MyInjectable } from '../dependency-injection/my-injectable';
+import { MyInjectable } from './dependency-injection/my-injectable';
 import { TokenService } from '../domain/token-service.interface';
 import { JwtService } from '@nestjs/jwt';
 

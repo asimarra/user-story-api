@@ -1,4 +1,4 @@
-import { MyInjectable } from '@shared/dependency-injection/my-injectable';
+import { MyInjectable } from '@src/shared/infrastructure/dependency-injection/my-injectable';
 import { UserEntityRepository } from '../domain/user.repository.interface';
 import { UserEntity } from '../domain/user.entity';
 

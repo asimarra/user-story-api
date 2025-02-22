@@ -1,4 +1,4 @@
-import { MyInjectable } from '@shared/dependency-injection/my-injectable';
+import { MyInjectable } from '@src/shared/infrastructure/dependency-injection/my-injectable';
 import { UserEntityRepository } from '@src/contexts/users/domain/user.repository.interface';
 import { SignUpRequest, SignUpResponse } from '../domain/signup.dto';
 import * as bcrypt from 'bcrypt';

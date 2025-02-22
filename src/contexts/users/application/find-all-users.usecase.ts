@@ -1,4 +1,4 @@
-import { MyInjectable } from '@shared/dependency-injection/my-injectable';
+import { MyInjectable } from '@src/shared/infrastructure/dependency-injection/my-injectable';
 import {
   findAllResponse,
   UserEntityRepository,

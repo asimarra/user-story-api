@@ -3,7 +3,7 @@ import {
   UserEntityRepository,
 } from '@contexts/users/domain/user.repository.interface';
 import { UserEntity } from '@contexts/users/domain/user.entity';
-import { MyInjectable } from '@src/shared/dependency-injection/my-injectable';
+import { MyInjectable } from '@src/shared/infrastructure/dependency-injection/my-injectable';
 import { User } from './user.db';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';

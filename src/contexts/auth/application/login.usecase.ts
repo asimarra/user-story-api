@@ -1,5 +1,5 @@
 import { UserEntityRepository } from '@src/contexts/users/domain/user.repository.interface';
-import { MyInjectable } from '@src/shared/dependency-injection/my-injectable';
+import { MyInjectable } from '@src/shared/infrastructure/dependency-injection/my-injectable';
 import { LoginRequest, LoginResponse } from '../domain/login.dto';
 import { TokenService } from '@src/shared/domain/token-service.interface';
 import * as bcrypt from 'bcrypt';
