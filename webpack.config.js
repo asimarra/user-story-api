@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const { RunScriptWebpackPlugin } = require('run-script-webpack-plugin');
 
 module.exports = {
@@ -23,8 +24,12 @@ module.exports = {
   mode: 'development',
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.build.json' })],
   },
-  plugins: [new webpack.HotModuleReplacementPlugin(), new RunScriptWebpackPlugin({ name: 'server.js', autoRestart: false })],
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new RunScriptWebpackPlugin({ name: 'server.js', autoRestart: false }),
+  ],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'server.js',
