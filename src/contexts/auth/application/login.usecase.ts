@@ -34,7 +34,7 @@ export class LoginUseCase {
       };
     }
 
-    const token = await this.tokenService.generate({
+    const token = this.tokenService.generate({
       userId: userData.id,
     });
 
