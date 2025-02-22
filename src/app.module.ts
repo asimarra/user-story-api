@@ -4,6 +4,7 @@ import environmentConfig from './config/environments.config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './contexts/users/user.module';
 import { AuthModule } from './contexts/auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -11,6 +12,11 @@ import { AuthModule } from './contexts/auth/auth.module';
       isGlobal: true,
       cache: true,
       load: [environmentConfig],
+    }),
+
+    JwtModule.register({
+      global: true,
+      signOptions: { expiresIn: '1h' },
     }),
 
     MongooseModule.forRootAsync({
@@ -26,6 +32,5 @@ import { AuthModule } from './contexts/auth/auth.module';
     AuthModule,
   ],
   controllers: [],
-  providers: [],
 })
 export class AppModule {}

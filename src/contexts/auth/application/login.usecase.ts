@@ -1,11 +1,15 @@
 import { UserEntityRepository } from '@src/contexts/users/domain/user.repository.interface';
 import { MyInjectable } from '@src/shared/dependency-injection/my-injectable';
 import { LoginRequest, LoginResponse } from '../domain/login.dto';
+import { TokenService } from '@src/shared/domain/token-service.interface';
 import * as bcrypt from 'bcrypt';
 
 @MyInjectable()
 export class LoginUseCase {
-  constructor(private readonly userRepository: UserEntityRepository) {}
+  constructor(
+    private readonly userRepository: UserEntityRepository,
+    private readonly tokenService: TokenService,
+  ) {}
 
   async execute(params: LoginRequest): Promise<LoginResponse> {
     const { email, password } = params;
@@ -30,14 +34,17 @@ export class LoginUseCase {
       };
     }
 
+    const token = await this.tokenService.generate({
+      userId: userData.id,
+    });
+
     return {
       error: false,
       data: {
-        userId: userData.id,
         name: userData.name,
         email: email,
         role: userData.role,
-        token: 'fake-jwt-token',
+        token,
       },
     };
   }

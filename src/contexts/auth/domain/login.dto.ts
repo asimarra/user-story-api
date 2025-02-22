@@ -8,7 +8,6 @@ export interface LoginResponse {
   data:
     | { message: string }
     | {
-        userId: string;
         name: string;
         email: string;
         role: string;

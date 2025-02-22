@@ -6,6 +6,8 @@ import { UserEntityRepository } from '../users/domain/user.repository.interface'
 
 import { UserModule } from '../users/user.module';
 import { LoginUseCase } from './application/login.usecase';
+import { JwtTokenService } from '@src/shared/infrastructure/jwt-token-service';
+import { TokenService } from '@src/shared/domain/token-service.interface';
 
 @Module({
   imports: [UserModule],
@@ -17,6 +19,11 @@ import { LoginUseCase } from './application/login.usecase';
     {
       provide: UserEntityRepository,
       useExisting: MongooseUserRepository,
+    },
+    JwtTokenService,
+    {
+      provide: TokenService,
+      useExisting: JwtTokenService,
     },
   ],
 })

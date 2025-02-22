@@ -5,4 +5,5 @@ export default () => ({
     connectionString:
       process.env.MONGO_URL ?? 'mongodb://localhost:27017/user-story-api',
   },
+  jwtSecret: process.env.JWT_SECRET ?? 'secret-for-dev-2025@@',
 });
