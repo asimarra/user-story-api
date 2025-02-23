@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Product, ProductSchema } from './repositories/product.db';
 import { ProductController } from './product.controller';
 import { FindAllProductUseCase } from '../application/find-all-products.usecase';
+import { FindProductByIdUseCase } from '../application/find-product-by-id.usecase';
 import { MongooseProductRepository } from './repositories/mongoose.product-repository';
 import { ProductEntityRepository } from '../domain/product.repository.interface';
 
@@ -18,6 +19,7 @@ import { ProductEntityRepository } from '../domain/product.repository.interface'
   controllers: [ProductController],
   providers: [
     FindAllProductUseCase,
+    FindProductByIdUseCase,
     MongooseProductRepository,
     {
       provide: ProductEntityRepository,
