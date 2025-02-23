@@ -10,6 +10,7 @@ import { JwtTokenService } from '@src/shared/infrastructure/jwt-token-service';
 import { TokenService } from '@src/shared/domain/token-service.interface';
 import { CreateUserUseCase } from './application/create-user.usecase';
 import { UpdateUserUseCase } from './application/update-user.usecase';
+import { DeleteUserUseCase } from './application/delete-user.usecase';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { UpdateUserUseCase } from './application/update-user.usecase';
     FindAllUserUseCase,
     CreateUserUseCase,
     UpdateUserUseCase,
+    DeleteUserUseCase,
     MongooseUserRepository,
     {
       provide: UserEntityRepository,

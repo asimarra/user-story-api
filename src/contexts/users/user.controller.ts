@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   Inject,
   NotFoundException,
@@ -14,7 +15,7 @@ import { FindUserByEmailHttpDto } from './infrastructure/dto/find-user-by-email.
 import { FindAllUserUseCase } from './application/find-all-users.usecase';
 import { FindAllHttpDto } from './infrastructure/dto/find-all.http.dto';
 import { findAllResponse } from './domain/user.repository.interface';
-import { PrimitiveUser, UserEntity } from './domain/user.entity';
+import { PrimitiveUser, UserEntity, UserStatus } from './domain/user.entity';
 import errors from '@src/config/errors.config';
 import { AuthGuard } from '@src/shared/infrastructure/guards/auth.guard';
 import { Permissions } from '@src/shared/infrastructure/decorators/permissions.decorator';
@@ -28,6 +29,8 @@ import { CreateUserResponse } from './domain/create-user.dto';
 import { UpdateUserHttpDto } from './infrastructure/dto/update-user.http.dto';
 import { UpdateUserResponse } from './domain/update-user.dto';
 import { UpdateUserUseCase } from './application/update-user.usecase';
+import { DeleteUserResponse } from './domain/delete-user.dto';
+import { DeleteUserUseCase } from './application/delete-user.usecase';
 
 @UseGuards(AuthGuard, AuthorizationGuard)
 @Permissions([{ resource: Resource.USERS, actions: [Action.READ] }])
@@ -38,6 +41,7 @@ export class UserController {
     @Inject() private readonly findAllUserUseCase: FindAllUserUseCase,
     @Inject() private readonly createUserUseCase: CreateUserUseCase,
     @Inject() private readonly updateUserUseCase: UpdateUserUseCase,
+    @Inject() private readonly deleteUserUseCase: DeleteUserUseCase,
   ) {}
 
   @Get()
@@ -95,5 +99,22 @@ export class UserController {
     }
 
     return updateUserResponse;
+  }
+
+  @Permissions([{ resource: Resource.USERS, actions: [Action.DELETE] }])
+  @Delete(':userId')
+  async deleteUser(
+    @Param('userId') userId: string,
+  ): Promise<DeleteUserResponse | NotFoundException> {
+    const deleteUserResponse = await this.deleteUserUseCase.execute(
+      userId,
+      UserStatus.DELETED,
+    );
+
+    if (deleteUserResponse.error) {
+      throw new UnprocessableEntityException(deleteUserResponse.data);
+    }
+
+    return deleteUserResponse;
   }
 }
