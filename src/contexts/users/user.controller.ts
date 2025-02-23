@@ -5,6 +5,7 @@ import {
   NotFoundException,
   Param,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { FindUserByEmailUseCase } from './application/find-user-by-email.usecase';
 import { FindUserByEmailHttpDto } from './infrastructure/dto/find-user-by-email.http.dto';
@@ -13,7 +14,9 @@ import { FindAllHttpDto } from './infrastructure/dto/find-all.http.dto';
 import { findAllResponse } from './domain/user.repository.interface';
 import { PrimitiveUser } from './domain/user.entity';
 import errors from '@src/config/errors.config';
+import { AuthGuard } from '@src/shared/infrastructure/guards/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('users')
 export class UserController {
   constructor(

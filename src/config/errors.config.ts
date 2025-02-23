@@ -21,7 +21,7 @@ const errors = {
   },
   unauthorized: {
     statusCode: HttpStatus.UNAUTHORIZED,
-    message: 'Unauthorized',
+    message: 'Invalid Token',
     error: 'Unauthorized',
     code: 'UNAUTHORIZED',
   },
