@@ -11,18 +11,22 @@ import {
   MinLength,
   ValidateIf,
 } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateUserHttpDto {
+  @ApiProperty({ required: false })
   @IsNotEmpty()
   @IsOptional()
   @IsString()
   name: string;
 
+  @ApiProperty({ required: false })
   @IsNotEmpty()
   @IsOptional()
   @IsEmail()
   email: string;
 
+  @ApiProperty({ required: false })
   @IsNotEmpty()
   @IsOptional()
   @MinLength(6)
@@ -32,6 +36,7 @@ export class UpdateUserHttpDto {
   })
   password: string;
 
+  @ApiProperty({ required: false })
   @IsNotEmpty()
   @IsOptional()
   @MinLength(6)
@@ -41,11 +46,13 @@ export class UpdateUserHttpDto {
   @ValidateIf((o: UpdateUserHttpDto) => o.password !== o.repeatPassword)
   repeatPassword: string;
 
+  @ApiProperty({ required: false })
   @IsNotEmpty()
   @IsOptional()
   @IsEnum(UserStatus)
   status: UserStatus;
 
+  @ApiProperty({ required: false })
   @IsNotEmpty()
   @IsOptional()
   @IsEnum(Roles)

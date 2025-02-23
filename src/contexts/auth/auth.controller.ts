@@ -1,15 +1,25 @@
 import {
   Body,
   Controller,
+  HttpStatus,
   Inject,
   Post,
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { SignUpUseCase } from './application/signup.usecase';
-import { SignUpHttpDto } from './infrastructure/dto/signup.http.dto';
-import { LoginHttpDto } from './infrastructure/dto/login.http.dto';
+import {
+  SignUpErrorResponseHttpDto,
+  SignUpHttpDto,
+  SignUpSuccessResponseHttpDto,
+} from './infrastructure/dto/signup.http.dto';
+import {
+  LoginErrorResponseHttpDto,
+  LoginHttpDto,
+  LoginSuccessResponseHttpDto,
+} from './infrastructure/dto/login.http.dto';
 import { LoginUseCase } from './application/login.usecase';
+import { ApiOkResponse, ApiUnprocessableEntityResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -18,6 +28,12 @@ export class AuthController {
     @Inject() private readonly loginUseCase: LoginUseCase,
   ) {}
 
+  @ApiOkResponse({
+    type: SignUpSuccessResponseHttpDto,
+  })
+  @ApiUnprocessableEntityResponse({
+    type: SignUpErrorResponseHttpDto,
+  })
   @Post('signup')
   async singUp(@Body() data: SignUpHttpDto) {
     const singUpResponse = await this.singUpUseCase.execute(data);
@@ -29,6 +45,12 @@ export class AuthController {
     return singUpResponse.data;
   }
 
+  @ApiOkResponse({
+    type: LoginSuccessResponseHttpDto,
+  })
+  @ApiUnprocessableEntityResponse({
+    type: LoginErrorResponseHttpDto,
+  })
   @Post('login')
   async login(@Body() data: LoginHttpDto) {
     const loginResponse = await this.loginUseCase.execute(data);

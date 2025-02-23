@@ -2,6 +2,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Inject,
   NotFoundException,
   Param,
@@ -13,7 +14,10 @@ import {
 import { FindUserByEmailUseCase } from './application/find-user-by-email.usecase';
 import { FindUserByEmailHttpDto } from './infrastructure/dto/find-user-by-email.http.dto';
 import { FindAllUserUseCase } from './application/find-all-users.usecase';
-import { FindAllHttpDto } from './infrastructure/dto/find-all.http.dto';
+import {
+  FindAllHttpDto,
+  FindAllHttpResponseDto,
+} from './infrastructure/dto/find-all.http.dto';
 import { findAllResponse } from './domain/user.repository.interface';
 import { PrimitiveUser, UserEntity, UserStatus } from './domain/user.entity';
 import errors from '@src/config/errors.config';
@@ -31,6 +35,7 @@ import { UpdateUserResponse } from './domain/update-user.dto';
 import { UpdateUserUseCase } from './application/update-user.usecase';
 import { DeleteUserResponse } from './domain/delete-user.dto';
 import { DeleteUserUseCase } from './application/delete-user.usecase';
+import { ApiResponse } from '@nestjs/swagger';
 
 @UseGuards(AuthGuard, AuthorizationGuard)
 @Permissions([{ resource: Resource.USERS, actions: [Action.READ] }])
@@ -44,6 +49,11 @@ export class UserController {
     @Inject() private readonly deleteUserUseCase: DeleteUserUseCase,
   ) {}
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get all users',
+    type: [FindAllHttpResponseDto],
+  })
   @Get()
   findAll(@Query() query: FindAllHttpDto): Promise<findAllResponse[] | null> {
     const { limit = 10, offset = 0 } = query;
