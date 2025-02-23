@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Query,
+  Req,
   UnprocessableEntityException,
   UseGuards,
 } from '@nestjs/common';
@@ -36,6 +37,8 @@ import { UpdateUserUseCase } from './application/update-user.usecase';
 import { DeleteUserResponse } from './domain/delete-user.dto';
 import { DeleteUserUseCase } from './application/delete-user.usecase';
 import { ApiResponse } from '@nestjs/swagger';
+import { UpdateProfileUserUseCase } from './application/update-profile-user.usecase';
+import { UpdateProfileUserHttpDto } from './infrastructure/dto/update-profile-user.http.dto';
 
 @UseGuards(AuthGuard, AuthorizationGuard)
 @Permissions([{ resource: Resource.USERS, actions: [Action.READ] }])
@@ -47,6 +50,8 @@ export class UserController {
     @Inject() private readonly createUserUseCase: CreateUserUseCase,
     @Inject() private readonly updateUserUseCase: UpdateUserUseCase,
     @Inject() private readonly deleteUserUseCase: DeleteUserUseCase,
+    @Inject()
+    private readonly updateProfileUserUseCase: UpdateProfileUserUseCase,
   ) {}
 
   @ApiResponse({
@@ -102,6 +107,33 @@ export class UserController {
 
     const updateUserResponse = await this.updateUserUseCase.execute(
       new UserEntity(userId, name, email, password, status, role),
+    );
+
+    if (updateUserResponse.error) {
+      throw new UnprocessableEntityException(updateUserResponse.data);
+    }
+
+    return updateUserResponse;
+  }
+
+  @Permissions([{ resource: Resource.USERS, actions: [Action.UPDATE_PROFILE] }])
+  @Patch(':userId/profile')
+  async updateProfileUser(
+    @Req() req: { userId: string },
+    @Param('userId') userId: string,
+    @Body()
+    updateUserDto: UpdateProfileUserHttpDto,
+  ): Promise<UpdateUserResponse | NotFoundException> {
+    const { name, email, password } = updateUserDto;
+
+    const updateUserResponse = await this.updateProfileUserUseCase.execute(
+      {
+        id: userId,
+        name,
+        email,
+        password,
+      },
+      req.userId,
     );
 
     if (updateUserResponse.error) {

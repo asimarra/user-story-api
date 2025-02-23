@@ -3,4 +3,5 @@ export enum Action {
   CREATE = 'CREATE',
   UPDATE = 'UPDATE',
   DELETE = 'DELETE',
+  UPDATE_PROFILE = 'UPDATE_PROFILE',
 }

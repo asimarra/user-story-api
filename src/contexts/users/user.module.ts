@@ -11,6 +11,7 @@ import { TokenService } from '@src/shared/domain/token-service.interface';
 import { CreateUserUseCase } from './application/create-user.usecase';
 import { UpdateUserUseCase } from './application/update-user.usecase';
 import { DeleteUserUseCase } from './application/delete-user.usecase';
+import { UpdateProfileUserUseCase } from './application/update-profile-user.usecase';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { DeleteUserUseCase } from './application/delete-user.usecase';
     CreateUserUseCase,
     UpdateUserUseCase,
     DeleteUserUseCase,
+    UpdateProfileUserUseCase,
     MongooseUserRepository,
     {
       provide: UserEntityRepository,

@@ -12,7 +12,7 @@ export const PermissionByRole: PermissionEntity[] = [
   {
     role: Roles.USER,
     resource: Resource.USERS,
-    actions: [Action.UPDATE],
+    actions: [Action.UPDATE_PROFILE],
   },
   {
     role: Roles.ADMIN,
