@@ -8,6 +8,9 @@ import { MongooseProductRepository } from './repositories/mongoose.product-repos
 import { ProductEntityRepository } from '../domain/product.repository.interface';
 import { CreateProductUseCase } from '../application/create-product.usecase';
 import { UpdateProductUseCase } from '../application/update-product.usecase';
+import { UserModule } from '@src/contexts/users/user.module';
+import { JwtTokenService } from '@src/shared/infrastructure/jwt-token-service';
+import { TokenService } from '@src/shared/domain/token-service.interface';
 
 @Module({
   imports: [
@@ -17,6 +20,7 @@ import { UpdateProductUseCase } from '../application/update-product.usecase';
         schema: ProductSchema,
       },
     ]),
+    UserModule,
   ],
   controllers: [ProductController],
   providers: [
@@ -28,6 +32,11 @@ import { UpdateProductUseCase } from '../application/update-product.usecase';
     {
       provide: ProductEntityRepository,
       useExisting: MongooseProductRepository,
+    },
+    JwtTokenService,
+    {
+      provide: TokenService,
+      useExisting: JwtTokenService,
     },
   ],
   exports: [MongooseModule],

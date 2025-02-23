@@ -10,6 +10,7 @@ import {
   Post,
   Query,
   UnprocessableEntityException,
+  UseGuards,
 } from '@nestjs/common';
 import { FindProductByIdUseCase } from '../application/find-product-by-id.usecase';
 import { FindAllProductUseCase } from '../application/find-all-products.usecase';
@@ -34,7 +35,14 @@ import {
   UpdateProductUseCase,
 } from '../application/update-product.usecase';
 import { UpdateProductHttpDto } from './dto/update-product.http.dto';
+import { AuthGuard } from '@src/shared/infrastructure/guards/auth.guard';
+import { AuthorizationGuard } from '@src/shared/infrastructure/guards/authorization.guard';
+import { Resource } from '@src/shared/domain/resources.enum';
+import { Permissions } from '@src/shared/infrastructure/decorators/permissions.decorator';
+import { Action } from '@src/shared/domain/action.enum';
 
+@UseGuards(AuthGuard, AuthorizationGuard)
+@Permissions([{ resource: Resource.PRODUCTS, actions: [Action.READ] }])
 @Controller('products')
 export class ProductController {
   constructor(
@@ -74,6 +82,7 @@ export class ProductController {
     return product;
   }
 
+  @Permissions([{ resource: Resource.PRODUCTS, actions: [Action.CREATE] }])
   @Post()
   async createProduct(
     @Body() createProductDto: CreateProductHttpDto,
@@ -91,6 +100,7 @@ export class ProductController {
     return createProductResponse;
   }
 
+  @Permissions([{ resource: Resource.PRODUCTS, actions: [Action.UPDATE] }])
   @Patch(':productId')
   async updateProduct(
     @Param('productId') productId: string,

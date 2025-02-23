@@ -39,6 +39,13 @@ import { DeleteUserUseCase } from './application/delete-user.usecase';
       useExisting: JwtTokenService,
     },
   ],
-  exports: [MongooseModule],
+  exports: [
+    MongooseModule,
+    MongooseUserRepository,
+    {
+      provide: UserEntityRepository,
+      useExisting: MongooseUserRepository,
+    },
+  ],
 })
 export class UserModule {}
