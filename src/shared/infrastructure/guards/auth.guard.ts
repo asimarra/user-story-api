@@ -9,7 +9,6 @@ import {
 import errors from '@src/config/errors.config';
 import { TokenService } from '@src/shared/domain/token-service.interface';
 import { Request } from 'express';
-import { Observable } from 'rxjs';
 
 export interface CustomRequest extends Request {
   userId?: string;
@@ -19,9 +18,7 @@ export interface CustomRequest extends Request {
 export class AuthGuard implements CanActivate {
   constructor(@Inject() private readonly tokenService: TokenService) {}
 
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest<CustomRequest>();
     const token = this.extractTokenFromHeader(request);
 
