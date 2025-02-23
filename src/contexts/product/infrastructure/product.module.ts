@@ -6,6 +6,7 @@ import { FindAllProductUseCase } from '../application/find-all-products.usecase'
 import { FindProductByIdUseCase } from '../application/find-product-by-id.usecase';
 import { MongooseProductRepository } from './repositories/mongoose.product-repository';
 import { ProductEntityRepository } from '../domain/product.repository.interface';
+import { CreateProductUseCase } from '../application/create-product.usecase';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ProductEntityRepository } from '../domain/product.repository.interface'
   providers: [
     FindAllProductUseCase,
     FindProductByIdUseCase,
+    CreateProductUseCase,
     MongooseProductRepository,
     {
       provide: ProductEntityRepository,

@@ -26,7 +26,7 @@ export class ProductEntity {
 
   toPrimitive(): any {
     return {
-      id: this.id,
+      id: this.id || '',
       name: this.name,
       description: this.description,
       price: this.price,
