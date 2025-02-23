@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { UserStatus } from '../../domain/user.entity';
 import { Roles } from '@src/shared/domain/roles.enum';
 
@@ -9,7 +9,7 @@ export class FindAllHttpDto {
   limit?: string;
 
   @ApiProperty({ required: false })
-  @ApiProperty()
+  @IsString()
   offset?: string;
 }
 
