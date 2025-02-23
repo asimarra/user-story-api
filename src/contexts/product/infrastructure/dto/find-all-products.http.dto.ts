@@ -8,7 +8,7 @@ export class FindAllProductsHttpDto {
   limit?: string;
 
   @ApiProperty({ required: false })
-  @ApiProperty()
+  @IsOptional()
   offset?: string;
 }
 
