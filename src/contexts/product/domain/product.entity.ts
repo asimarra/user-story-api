@@ -11,7 +11,7 @@ export interface PrimitiveProduct {
   description: string;
   price: number;
   stock: number;
-  status: string;
+  status: ProductStatus;
 }
 
 export class ProductEntity {
