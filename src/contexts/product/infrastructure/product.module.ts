@@ -7,6 +7,7 @@ import { FindProductByIdUseCase } from '../application/find-product-by-id.usecas
 import { MongooseProductRepository } from './repositories/mongoose.product-repository';
 import { ProductEntityRepository } from '../domain/product.repository.interface';
 import { CreateProductUseCase } from '../application/create-product.usecase';
+import { UpdateProductUseCase } from '../application/update-product.usecase';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { CreateProductUseCase } from '../application/create-product.usecase';
     FindAllProductUseCase,
     FindProductByIdUseCase,
     CreateProductUseCase,
+    UpdateProductUseCase,
     MongooseProductRepository,
     {
       provide: ProductEntityRepository,

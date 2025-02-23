@@ -6,6 +6,7 @@ import {
   Inject,
   NotFoundException,
   Param,
+  Patch,
   Post,
   Query,
   UnprocessableEntityException,
@@ -28,6 +29,11 @@ import {
   CreateProductResponse,
   CreateProductUseCase,
 } from '../application/create-product.usecase';
+import {
+  UpdateProductResponse,
+  UpdateProductUseCase,
+} from '../application/update-product.usecase';
+import { UpdateProductHttpDto } from './dto/update-product.http.dto';
 
 @Controller('products')
 export class ProductController {
@@ -35,6 +41,7 @@ export class ProductController {
     @Inject() private readonly findAllProductUseCase: FindAllProductUseCase,
     @Inject() private readonly findProductByIdUseCase: FindProductByIdUseCase,
     @Inject() private readonly createProductUseCase: CreateProductUseCase,
+    @Inject() private readonly updateProductUseCase: UpdateProductUseCase,
   ) {}
 
   @ApiResponse({
@@ -82,5 +89,25 @@ export class ProductController {
     }
 
     return createProductResponse;
+  }
+
+  @Patch(':productId')
+  async updateProduct(
+    @Param('productId') productId: string,
+    @Body()
+    updateProductDto: UpdateProductHttpDto,
+  ): Promise<UpdateProductResponse | NotFoundException> {
+    const { name, description, price, stock, status } = updateProductDto;
+
+    const updatedProductResponse = await this.updateProductUseCase.execute(
+      productId,
+      new ProductEntity('', name, description, price, stock, status),
+    );
+
+    if (updatedProductResponse.error) {
+      throw new NotFoundException(updatedProductResponse.data);
+    }
+
+    return updatedProductResponse;
   }
 }
