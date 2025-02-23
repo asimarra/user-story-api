@@ -19,4 +19,5 @@ export abstract class UserEntityRepository {
   ): Promise<findAllResponse[] | null>;
   abstract create(user: UserEntity): Promise<string | null>;
   abstract findById(userId: string): Promise<UserEntity | null>;
+  abstract update(user: UserEntity): Promise<string | null>;
 }

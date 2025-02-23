@@ -52,7 +52,9 @@ export class MongooseUserRepository extends UserEntityRepository {
   }
 
   async findById(userId: string): Promise<UserEntity | null> {
-    const user = await this.UserModel.findOne({ _id: userId });
+    const user = await this.UserModel.findOne({
+      _id: userId,
+    });
 
     return user
       ? new UserEntity(
@@ -64,5 +66,16 @@ export class MongooseUserRepository extends UserEntityRepository {
           user.role,
         )
       : null;
+  }
+
+  async update(user: UserEntity): Promise<string | null> {
+    const updatedUser = await this.UserModel.updateOne(
+      {
+        _id: user.id,
+      },
+      user,
+    );
+
+    return updatedUser?.acknowledged ? user.id : null;
   }
 }

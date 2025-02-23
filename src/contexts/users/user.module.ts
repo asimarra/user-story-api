@@ -9,6 +9,7 @@ import { FindAllUserUseCase } from './application/find-all-users.usecase';
 import { JwtTokenService } from '@src/shared/infrastructure/jwt-token-service';
 import { TokenService } from '@src/shared/domain/token-service.interface';
 import { CreateUserUseCase } from './application/create-user.usecase';
+import { UpdateUserUseCase } from './application/update-user.usecase';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { CreateUserUseCase } from './application/create-user.usecase';
     FindUserByEmailUseCase,
     FindAllUserUseCase,
     CreateUserUseCase,
+    UpdateUserUseCase,
     MongooseUserRepository,
     {
       provide: UserEntityRepository,

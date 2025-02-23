@@ -4,6 +4,7 @@ import {
   Inject,
   NotFoundException,
   Param,
+  Patch,
   Query,
   UnprocessableEntityException,
   UseGuards,
@@ -24,6 +25,9 @@ import { Body, Post } from '@nestjs/common';
 import { CreateUserHttpDto } from './infrastructure/dto/create-user.http.dto';
 import { CreateUserUseCase } from './application/create-user.usecase';
 import { CreateUserResponse } from './domain/create-user.dto';
+import { UpdateUserHttpDto } from './infrastructure/dto/update-user.http.dto';
+import { UpdateUserResponse } from './domain/update-user.dto';
+import { UpdateUserUseCase } from './application/update-user.usecase';
 
 @UseGuards(AuthGuard, AuthorizationGuard)
 @Permissions([{ resource: Resource.USERS, actions: [Action.READ] }])
@@ -33,6 +37,7 @@ export class UserController {
     @Inject() private readonly findUserByEmailUseCase: FindUserByEmailUseCase,
     @Inject() private readonly findAllUserUseCase: FindAllUserUseCase,
     @Inject() private readonly createUserUseCase: CreateUserUseCase,
+    @Inject() private readonly updateUserUseCase: UpdateUserUseCase,
   ) {}
 
   @Get()
@@ -70,5 +75,25 @@ export class UserController {
     }
 
     return createUserResponse;
+  }
+
+  @Permissions([{ resource: Resource.USERS, actions: [Action.UPDATE] }])
+  @Patch(':userId')
+  async updateUser(
+    @Param('userId') userId: string,
+    @Body()
+    updateUserDto: UpdateUserHttpDto,
+  ): Promise<UpdateUserResponse | NotFoundException> {
+    const { name, email, password, status, role } = updateUserDto;
+
+    const updateUserResponse = await this.updateUserUseCase.execute(
+      new UserEntity(userId, name, email, password, status, role),
+    );
+
+    if (updateUserResponse.error) {
+      throw new UnprocessableEntityException(updateUserResponse.data);
+    }
+
+    return updateUserResponse;
   }
 }
