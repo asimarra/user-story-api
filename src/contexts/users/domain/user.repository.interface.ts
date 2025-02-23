@@ -18,4 +18,5 @@ export abstract class UserEntityRepository {
     offset?: number,
   ): Promise<findAllResponse[] | null>;
   abstract create(user: UserEntity): Promise<string | null>;
+  abstract findById(userId: string): Promise<UserEntity | null>;
 }

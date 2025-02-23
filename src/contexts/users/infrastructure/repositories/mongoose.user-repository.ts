@@ -50,4 +50,19 @@ export class MongooseUserRepository extends UserEntityRepository {
     const createdUser = await this.UserModel.create(user);
     return (createdUser._id as string).toString() ?? null;
   }
+
+  async findById(userId: string): Promise<UserEntity | null> {
+    const user = await this.UserModel.findOne({ _id: userId });
+
+    return user
+      ? new UserEntity(
+          user._id as string,
+          user.name,
+          user.email,
+          user.password,
+          user.status,
+          user.role,
+        )
+      : null;
+  }
 }

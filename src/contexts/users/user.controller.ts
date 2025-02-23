@@ -15,8 +15,13 @@ import { findAllResponse } from './domain/user.repository.interface';
 import { PrimitiveUser } from './domain/user.entity';
 import errors from '@src/config/errors.config';
 import { AuthGuard } from '@src/shared/infrastructure/guards/auth.guard';
+import { Permissions } from '@src/shared/infrastructure/decorators/permissions.decorator';
+import { Resource } from '@src/shared/domain/resources.enum';
+import { Action } from '@src/shared/domain/action.enum';
+import { AuthorizationGuard } from '@src/shared/infrastructure/guards/authorization.guard';
 
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, AuthorizationGuard)
+@Permissions([{ resource: Resource.USERS, actions: [Action.READ] }])
 @Controller('users')
 export class UserController {
   constructor(
