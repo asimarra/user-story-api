@@ -56,16 +56,18 @@ export class MongooseUserRepository extends UserEntityRepository {
       _id: userId,
     });
 
-    return user
-      ? new UserEntity(
-          user._id as string,
-          user.name,
-          user.email,
-          user.password,
-          user.status,
-          user.role,
-        )
-      : null;
+    if (!user) {
+      return null;
+    }
+
+    return new UserEntity(
+      user._id as string,
+      user.name,
+      user.email,
+      user.password,
+      user.status,
+      user.role,
+    );
   }
 
   async update(user: UserEntity): Promise<string | null> {
