@@ -1,4 +1,4 @@
-import { Roles } from '@src/shared/domain/roles.entity';
+import { Roles } from '@src/shared/domain/roles.enum';
 import { UserEntity, UserStatus } from './user.entity';
 
 export interface findAllResponse {

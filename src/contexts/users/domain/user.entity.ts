@@ -1,4 +1,4 @@
-import { Roles } from '@shared/domain/roles.entity';
+import { Roles } from '@src/shared/domain/roles.enum';
 
 export enum UserStatus {
   ACTIVE = 'ACTIVE',

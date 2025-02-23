@@ -3,7 +3,7 @@ import { UserEntityRepository } from '@src/contexts/users/domain/user.repository
 import { SignUpRequest, SignUpResponse } from '../domain/signup.dto';
 import * as bcrypt from 'bcrypt';
 import { UserEntity, UserStatus } from '@src/contexts/users/domain/user.entity';
-import { Roles } from '@src/shared/domain/roles.entity';
+import { Roles } from '@src/shared/domain/roles.enum';
 
 @MyInjectable()
 export class SignUpUseCase {

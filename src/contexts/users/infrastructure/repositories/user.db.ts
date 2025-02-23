@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Roles } from '@src/shared/domain/roles.entity';
+import { Roles } from '@src/shared/domain/roles.enum';
 import { Document } from 'mongoose';
 import { UserStatus } from '../../domain/user.entity';
 
