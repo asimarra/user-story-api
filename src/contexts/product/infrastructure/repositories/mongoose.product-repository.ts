@@ -4,6 +4,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Product } from './product.db';
 import { Model } from 'mongoose';
 import { ProductEntity } from '../../domain/product.entity';
+import { MongooseTransaction } from '@src/contexts/invoice/infrastructure/repositories/mongoose.transaction';
+import { TransactionStrategy } from '@src/contexts/invoice/domain/transaction.interface';
 
 @MyInjectable()
 export class MongooseProductRepository extends ProductEntityRepository {
@@ -60,5 +62,24 @@ export class MongooseProductRepository extends ProductEntityRepository {
     product: Partial<Product>,
   ): Promise<ProductEntity | null> {
     return this.productModel.findByIdAndUpdate(id, product, { new: true });
+  }
+
+  async updateStock(
+    productId: string,
+    newStock: number,
+    transaction: TransactionStrategy,
+  ): Promise<boolean> {
+    const session = (transaction as MongooseTransaction).getSession();
+
+    if (!session) {
+      throw new Error('Transaction session is null');
+    }
+
+    const result = await this.productModel.updateOne(
+      { _id: productId },
+      { $set: { stock: newStock } },
+      { session },
+    );
+    return result.modifiedCount > 0;
   }
 }

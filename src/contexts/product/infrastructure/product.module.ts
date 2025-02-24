@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Product, ProductSchema } from './repositories/product.db';
 import { ProductController } from './product.controller';
@@ -11,6 +11,7 @@ import { UpdateProductUseCase } from '../application/update-product.usecase';
 import { UserModule } from '@src/contexts/users/user.module';
 import { JwtTokenService } from '@src/shared/infrastructure/jwt-token-service';
 import { TokenService } from '@src/shared/domain/token-service.interface';
+import { InvoiceModule } from '@src/contexts/invoice/infrastructure/invoice.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { TokenService } from '@src/shared/domain/token-service.interface';
       },
     ]),
     UserModule,
+    forwardRef(() => InvoiceModule),
   ],
   controllers: [ProductController],
   providers: [

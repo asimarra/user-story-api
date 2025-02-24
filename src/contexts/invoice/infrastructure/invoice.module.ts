@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { InvoiceController } from './invoice.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Invoice, InvoiceSchema } from './repositories/invoice.db';
@@ -9,6 +9,8 @@ import { MongooseInvoiceRepository } from './repositories/mongoose.invoice-repos
 import { InvoiceEntityRepository } from '../domain/invoice.repository.interface';
 import { JwtTokenService } from '@src/shared/infrastructure/jwt-token-service';
 import { TokenService } from '@src/shared/domain/token-service.interface';
+import { MongooseTransaction } from './repositories/mongoose.transaction';
+import { TransactionStrategy } from '../domain/transaction.interface';
 
 @Module({
   imports: [
@@ -19,7 +21,7 @@ import { TokenService } from '@src/shared/domain/token-service.interface';
       },
     ]),
     UserModule,
-    ProductModule,
+    forwardRef(() => ProductModule),
   ],
   controllers: [InvoiceController],
   providers: [
@@ -34,7 +36,24 @@ import { TokenService } from '@src/shared/domain/token-service.interface';
       provide: TokenService,
       useExisting: JwtTokenService,
     },
+    MongooseTransaction,
+    {
+      provide: TransactionStrategy,
+      useExisting: MongooseTransaction,
+    },
   ],
-  exports: [MongooseModule],
+  exports: [
+    MongooseModule,
+    MongooseInvoiceRepository,
+    {
+      provide: InvoiceEntityRepository,
+      useExisting: MongooseInvoiceRepository,
+    },
+    MongooseTransaction,
+    {
+      provide: TransactionStrategy,
+      useExisting: MongooseTransaction,
+    },
+  ],
 })
 export class InvoiceModule {}

@@ -3,12 +3,11 @@ import { InvoiceEntityRepository } from '../../domain/invoice.repository.interfa
 import { InjectModel } from '@nestjs/mongoose';
 import { Invoice } from './invoice.db';
 import { Model } from 'mongoose';
-import {
-  InvoiceEntity,
-  ProductPurchaseEntity,
-} from '../../domain/invoice.entity';
+import { InvoiceEntity } from '../../domain/invoice.entity';
 import { UserEntity } from '@src/contexts/users/domain/user.entity';
 import { ProductEntity } from '@src/contexts/product/domain/product.entity';
+import { TransactionStrategy } from '../../domain/transaction.interface';
+import { MongooseTransaction } from './mongoose.transaction';
 
 @MyInjectable()
 export class MongooseInvoiceRepository extends InvoiceEntityRepository {
@@ -55,22 +54,40 @@ export class MongooseInvoiceRepository extends InvoiceEntityRepository {
     );
   }
 
-  async create(invoice: InvoiceEntity): Promise<InvoiceEntity | null> {
+  async create(
+    invoice: InvoiceEntity,
+    transaction?: TransactionStrategy,
+  ): Promise<InvoiceEntity | null> {
+    const session = (transaction as MongooseTransaction).getSession();
+
+    if (!session) {
+      throw new Error('Transaction session is null');
+    }
+
     const createdInvoice = await new this.invoiceModel({
       user: invoice.user.id,
       total: invoice.total,
       status: invoice.status,
       createdAt: invoice.createdAt,
-      products: invoice.products.map((p: ProductPurchaseEntity) => ({
+      products: invoice.products.map((p) => ({
         product: p.product.id,
         quantity: p.quantity,
       })),
-    }).save();
+    }).save({ session });
 
     if (!createdInvoice._id) {
       return null;
     }
 
-    return this.findById(createdInvoice._id as string);
+    const response = new InvoiceEntity(
+      createdInvoice._id as string,
+      invoice.user,
+      invoice.products,
+      invoice.total,
+      invoice.status,
+      invoice.createdAt,
+    );
+
+    return response;
   }
 }

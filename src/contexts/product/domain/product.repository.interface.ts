@@ -1,3 +1,4 @@
+import { TransactionStrategy } from '@src/contexts/invoice/domain/transaction.interface';
 import { ProductEntity } from './product.entity';
 
 export abstract class ProductEntityRepository {
@@ -8,4 +9,10 @@ export abstract class ProductEntityRepository {
     id: string,
     productData: Partial<ProductEntity>,
   ): Promise<ProductEntity | null>;
+
+  abstract updateStock(
+    productId: string,
+    newStock: number,
+    transaction?: TransactionStrategy,
+  ): Promise<boolean>;
 }
