@@ -11,6 +11,7 @@ import { JwtTokenService } from '@src/shared/infrastructure/jwt-token-service';
 import { TokenService } from '@src/shared/domain/token-service.interface';
 import { MongooseTransaction } from './repositories/mongoose.transaction';
 import { TransactionStrategy } from '../domain/transaction.interface';
+import { FindInvoiceByIdUseCase } from '../application/find-invoice-by-id.usecase';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { TransactionStrategy } from '../domain/transaction.interface';
   controllers: [InvoiceController],
   providers: [
     CreateInvoiceUseCase,
+    FindInvoiceByIdUseCase,
     MongooseInvoiceRepository,
     {
       provide: InvoiceEntityRepository,

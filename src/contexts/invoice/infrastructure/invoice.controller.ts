@@ -2,7 +2,10 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   Inject,
+  NotFoundException,
+  Param,
   Post,
   Req,
   UseGuards,
@@ -17,12 +20,18 @@ import { AuthorizationGuard } from '@src/shared/infrastructure/guards/authorizat
 import { Permissions } from '@src/shared/infrastructure/decorators/permissions.decorator';
 import { Resource } from '@src/shared/domain/resources.enum';
 import { Action } from '@src/shared/domain/action.enum';
+import { ApiOkResponse } from '@nestjs/swagger';
+import { FindInvoiceByIdHttpDto } from './dto/find-invoice-by-id.http.dto';
+import errors from '@src/config/errors.config';
+import { FindInvoiceByIdUseCase } from '../application/find-invoice-by-id.usecase';
+import { InvoiceEntity } from '../domain/invoice.entity';
 
 @UseGuards(AuthGuard, AuthorizationGuard)
 @Controller('invoices')
 export class InvoiceController {
   constructor(
     @Inject() private readonly createProductUseCase: CreateInvoiceUseCase,
+    @Inject() private readonly findInvoiceByIdUseCase: FindInvoiceByIdUseCase,
   ) {}
 
   @Permissions([{ resource: Resource.INVOICES, actions: [Action.CREATE] }])
@@ -42,5 +51,22 @@ export class InvoiceController {
     }
 
     return saveInvoice;
+  }
+
+  @Permissions([{ resource: Resource.INVOICES, actions: [Action.READ] }])
+  @ApiOkResponse({
+    description: 'Get an invoice detail',
+  })
+  @Get(':invoiceId')
+  async findInvoiceById(
+    @Param() param: FindInvoiceByIdHttpDto,
+  ): Promise<InvoiceEntity | NotFoundException> {
+    const invoice = await this.findInvoiceByIdUseCase.execute(param.invoiceId);
+
+    if (!invoice) {
+      throw new NotFoundException(errors.notFound);
+    }
+
+    return invoice;
   }
 }
