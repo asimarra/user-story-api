@@ -90,4 +90,14 @@ export class MongooseInvoiceRepository extends InvoiceEntityRepository {
 
     return response;
   }
+
+  async getUserPurchasesInLastMonth(userId: string): Promise<number> {
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+    return this.invoiceModel.countDocuments({
+      user: userId,
+      createdAt: { $gte: oneMonthAgo },
+    });
+  }
 }

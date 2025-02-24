@@ -25,6 +25,8 @@ import { FindInvoiceByIdHttpDto } from './dto/find-invoice-by-id.http.dto';
 import errors from '@src/config/errors.config';
 import { FindInvoiceByIdUseCase } from '../application/find-invoice-by-id.usecase';
 import { InvoiceEntity } from '../domain/invoice.entity';
+import { UserInvoiceLastMonthUseCase } from '../application/user-invoice-last-month.usecase';
+import { UserInvoiceLastMonthHttpDto } from './dto/user-invoice-last-month.http.dto';
 
 @UseGuards(AuthGuard, AuthorizationGuard)
 @Controller('invoices')
@@ -32,6 +34,8 @@ export class InvoiceController {
   constructor(
     @Inject() private readonly createProductUseCase: CreateInvoiceUseCase,
     @Inject() private readonly findInvoiceByIdUseCase: FindInvoiceByIdUseCase,
+    @Inject()
+    private readonly userInvoiceLastMonthUseCase: UserInvoiceLastMonthUseCase,
   ) {}
 
   @Permissions([{ resource: Resource.INVOICES, actions: [Action.CREATE] }])
@@ -68,5 +72,13 @@ export class InvoiceController {
     }
 
     return invoice;
+  }
+
+  @Permissions([{ resource: Resource.INVOICES, actions: [Action.READ] }])
+  @Get('user/:userId/last-month')
+  async getUserPurchasesInLastMonth(
+    @Param() params: UserInvoiceLastMonthHttpDto,
+  ): Promise<{ noPurchases: number }> {
+    return this.userInvoiceLastMonthUseCase.execute(params.userId);
   }
 }

@@ -7,4 +7,5 @@ export abstract class InvoiceEntityRepository {
     invoice: Partial<InvoiceEntity>,
     transaction?: TransactionStrategy,
   ): Promise<InvoiceEntity | null>;
+  abstract getUserPurchasesInLastMonth(userId: string): Promise<number>;
 }
