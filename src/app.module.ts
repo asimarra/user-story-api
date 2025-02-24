@@ -6,6 +6,7 @@ import { UserModule } from './contexts/users/user.module';
 import { AuthModule } from './contexts/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ProductModule } from './contexts/product/infrastructure/product.module';
+import { InvoiceModule } from './contexts/invoice/infrastructure/invoice.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ProductModule } from './contexts/product/infrastructure/product.module'
     UserModule,
     AuthModule,
     ProductModule,
+    InvoiceModule,
   ],
   controllers: [],
 })

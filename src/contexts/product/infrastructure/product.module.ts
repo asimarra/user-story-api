@@ -39,6 +39,13 @@ import { TokenService } from '@src/shared/domain/token-service.interface';
       useExisting: JwtTokenService,
     },
   ],
-  exports: [MongooseModule],
+  exports: [
+    MongooseModule,
+    MongooseProductRepository,
+    {
+      provide: ProductEntityRepository,
+      useExisting: MongooseProductRepository,
+    },
+  ],
 })
 export class ProductModule {}

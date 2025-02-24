@@ -3,7 +3,10 @@ import { InvoiceEntityRepository } from '../../domain/invoice.repository.interfa
 import { InjectModel } from '@nestjs/mongoose';
 import { Invoice } from './invoice.db';
 import { Model } from 'mongoose';
-import { InvoiceEntity } from '../../domain/invoice.entity';
+import {
+  InvoiceEntity,
+  ProductPurchaseEntity,
+} from '../../domain/invoice.entity';
 import { UserEntity } from '@src/contexts/users/domain/user.entity';
 import { ProductEntity } from '@src/contexts/product/domain/product.entity';
 
@@ -53,7 +56,16 @@ export class MongooseInvoiceRepository extends InvoiceEntityRepository {
   }
 
   async create(invoice: InvoiceEntity): Promise<InvoiceEntity | null> {
-    const createdInvoice = await new this.invoiceModel(invoice).save();
+    const createdInvoice = await new this.invoiceModel({
+      user: invoice.user.id,
+      total: invoice.total,
+      status: invoice.status,
+      createdAt: invoice.createdAt,
+      products: invoice.products.map((p: ProductPurchaseEntity) => ({
+        product: p.product.id,
+        quantity: p.quantity,
+      })),
+    }).save();
 
     if (!createdInvoice._id) {
       return null;
