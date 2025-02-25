@@ -94,7 +94,7 @@ export class ProductController {
     );
 
     if (createProductResponse.error) {
-      throw new UnprocessableEntityException(createProductResponse.error);
+      throw new UnprocessableEntityException(createProductResponse.data);
     }
 
     return createProductResponse;
