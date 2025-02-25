@@ -35,7 +35,7 @@ export class AuthorizationGuard implements CanActivate {
     try {
       const routePermissions = this.reflector.getAllAndOverride<
         PermissionEntity[]
-      >(PERMISSIONS_KEY, [context.getClass(), context.getHandler()]);
+      >(PERMISSIONS_KEY, [context.getHandler(), context.getClass()]);
       const userData = await this.userRepository.findById(request.userId);
       const permissionsByRole = getPermissionByRole(userData?.role as Roles);
 
