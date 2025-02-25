@@ -29,7 +29,7 @@ export class UpdateProductUseCase {
     }
 
     return {
-      error: true,
+      error: false,
       data: { productId: updatedProduct.id },
     };
   }
