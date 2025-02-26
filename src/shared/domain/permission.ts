@@ -32,7 +32,7 @@ export const PermissionByRole: PermissionEntity[] = [
   {
     role: Roles.USER,
     resource: Resource.INVOICES,
-    actions: [Action.CREATE],
+    actions: [Action.CREATE, Action.READ],
   },
   {
     role: Roles.ADMIN,
