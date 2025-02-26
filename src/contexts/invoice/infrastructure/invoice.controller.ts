@@ -27,6 +27,8 @@ import { FindInvoiceByIdUseCase } from '../application/find-invoice-by-id.usecas
 import { InvoiceEntity } from '../domain/invoice.entity';
 import { UserInvoiceLastMonthUseCase } from '../application/user-invoice-last-month.usecase';
 import { UserInvoiceLastMonthHttpDto } from './dto/user-invoice-last-month.http.dto';
+import { FindInvoicesByUserIdHttpDto } from './dto/find-all-invoices-by-user-id.http.dto';
+import { FindInvoicesByUserIdUseCase } from '../application/find-all-invoices-by-user-id.usecase';
 
 @UseGuards(AuthGuard, AuthorizationGuard)
 @Controller('invoices')
@@ -36,6 +38,8 @@ export class InvoiceController {
     @Inject() private readonly findInvoiceByIdUseCase: FindInvoiceByIdUseCase,
     @Inject()
     private readonly userInvoiceLastMonthUseCase: UserInvoiceLastMonthUseCase,
+    @Inject()
+    private readonly findInvoicesByUserIdUseCase: FindInvoicesByUserIdUseCase,
   ) {}
 
   @Permissions([{ resource: Resource.INVOICES, actions: [Action.CREATE] }])
@@ -80,5 +84,24 @@ export class InvoiceController {
     @Param() params: UserInvoiceLastMonthHttpDto,
   ): Promise<{ noPurchases: number }> {
     return this.userInvoiceLastMonthUseCase.execute(params.userId);
+  }
+
+  @Permissions([{ resource: Resource.INVOICES, actions: [Action.READ] }])
+  @ApiOkResponse({
+    description: 'Get all invoice by user',
+  })
+  @Get('user/:userId')
+  async findInvoiceByUser(
+    @Param() param: FindInvoicesByUserIdHttpDto,
+  ): Promise<InvoiceEntity[] | NotFoundException> {
+    const invoice = await this.findInvoicesByUserIdUseCase.execute(
+      param.userId,
+    );
+
+    if (!invoice) {
+      throw new NotFoundException(errors.notFound);
+    }
+
+    return invoice;
   }
 }
