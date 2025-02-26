@@ -41,6 +41,7 @@ export class LoginUseCase {
     return {
       error: false,
       data: {
+        id: userData.id,
         name: userData.name,
         email: email,
         role: userData.role,
