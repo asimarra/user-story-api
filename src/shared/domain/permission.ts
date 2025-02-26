@@ -27,7 +27,7 @@ export const PermissionByRole: PermissionEntity[] = [
   {
     role: Roles.ADMIN,
     resource: Resource.PRODUCTS,
-    actions: [Action.CREATE, Action.UPDATE],
+    actions: [Action.CREATE, Action.UPDATE, Action.READ],
   },
   {
     role: Roles.USER,
