@@ -25,33 +25,7 @@ export class MongooseInvoiceRepository extends InvoiceEntityRepository {
       return null;
     }
 
-    const products = invoice.products.map((p) => ({
-      product: new ProductEntity(
-        p.product._id as string,
-        p.product.name,
-        p.product.description,
-        p.product.price,
-        p.product.stock,
-        p.product.status,
-      ),
-      quantity: p.quantity,
-    }));
-
-    return new InvoiceEntity(
-      invoice._id as string,
-      new UserEntity(
-        invoice.user._id as string,
-        invoice.user.name,
-        invoice.user.email,
-        '',
-        invoice.user.status,
-        invoice.user.role,
-      ),
-      products,
-      invoice.total,
-      invoice.status,
-      invoice.createdAt,
-    );
+    return this.mapToInvoiceEntity(invoice);
   }
 
   async create(
@@ -107,34 +81,36 @@ export class MongooseInvoiceRepository extends InvoiceEntityRepository {
       .populate('user')
       .populate('products.product');
 
-    return invoices.map((invoice) => {
-      const products = invoice.products.map((p) => ({
-        product: new ProductEntity(
-          p.product._id as string,
-          p.product.name,
-          p.product.description,
-          p.product.price,
-          p.product.stock,
-          p.product.status,
-        ),
-        quantity: p.quantity,
-      }));
+    return invoices.map((invoice) => this.mapToInvoiceEntity(invoice));
+  }
 
-      return new InvoiceEntity(
-        invoice._id as string,
-        new UserEntity(
-          invoice.user._id as string,
-          invoice.user.name,
-          invoice.user.email,
-          '',
-          invoice.user.status,
-          invoice.user.role,
-        ),
-        products,
-        invoice.total,
-        invoice.status,
-        invoice.createdAt,
-      );
-    });
+  private mapToInvoiceEntity(invoice: any): InvoiceEntity {
+    const products = invoice.products.map((p) => ({
+      product: new ProductEntity(
+        p.product._id as string,
+        p.product.name,
+        p.product.description,
+        p.product.price,
+        p.product.stock,
+        p.product.status,
+      ),
+      quantity: p.quantity,
+    }));
+
+    return new InvoiceEntity(
+      invoice._id as string,
+      new UserEntity(
+        invoice.user._id as string,
+        invoice.user.name,
+        invoice.user.email,
+        '',
+        invoice.user.status,
+        invoice.user.role,
+      ),
+      products,
+      invoice.total,
+      invoice.status,
+      invoice.createdAt,
+    );
   }
 }
