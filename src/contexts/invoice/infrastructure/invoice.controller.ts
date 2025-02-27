@@ -29,6 +29,7 @@ import { UserInvoiceLastMonthUseCase } from '../application/user-invoice-last-mo
 import { UserInvoiceLastMonthHttpDto } from './dto/user-invoice-last-month.http.dto';
 import { FindInvoicesByUserIdHttpDto } from './dto/find-all-invoices-by-user-id.http.dto';
 import { FindInvoicesByUserIdUseCase } from '../application/find-all-invoices-by-user-id.usecase';
+import { FindAllInvoicesUseCase } from '../application/find-all-invoices.usecase';
 
 @UseGuards(AuthGuard, AuthorizationGuard)
 @Controller('invoices')
@@ -40,6 +41,8 @@ export class InvoiceController {
     private readonly userInvoiceLastMonthUseCase: UserInvoiceLastMonthUseCase,
     @Inject()
     private readonly findInvoicesByUserIdUseCase: FindInvoicesByUserIdUseCase,
+    @Inject()
+    private readonly findAllInvoicesUseCase: FindAllInvoicesUseCase,
   ) {}
 
   @Permissions([{ resource: Resource.INVOICES, actions: [Action.CREATE] }])
@@ -103,5 +106,14 @@ export class InvoiceController {
     }
 
     return invoice;
+  }
+
+  @Permissions([{ resource: Resource.INVOICES, actions: [Action.READ] }])
+  @ApiOkResponse({
+    description: 'Get all invoices',
+  })
+  @Get()
+  async findAll(): Promise<InvoiceEntity[] | NotFoundException> {
+    return this.findAllInvoicesUseCase.execute();
   }
 }

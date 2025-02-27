@@ -9,4 +9,5 @@ export abstract class InvoiceEntityRepository {
   ): Promise<InvoiceEntity | null>;
   abstract getUserPurchasesInLastMonth(userId: string): Promise<number>;
   abstract findByUserId(userId: string): Promise<InvoiceEntity[]>;
+  abstract find(): Promise<InvoiceEntity[]>;
 }

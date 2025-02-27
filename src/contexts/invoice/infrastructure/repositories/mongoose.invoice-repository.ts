@@ -84,6 +84,14 @@ export class MongooseInvoiceRepository extends InvoiceEntityRepository {
     return invoices.map((invoice) => this.mapToInvoiceEntity(invoice));
   }
 
+  async find(): Promise<InvoiceEntity[]> {
+    const invoices = await this.invoiceModel
+      .find()
+      .populate('user')
+      .populate('products.product');
+    return invoices.map((invoice) => this.mapToInvoiceEntity(invoice));
+  }
+
   private mapToInvoiceEntity(invoice: any): InvoiceEntity {
     const products = invoice.products.map((p) => ({
       product: new ProductEntity(

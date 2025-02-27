@@ -14,6 +14,7 @@ import { TransactionStrategy } from '../domain/transaction.interface';
 import { FindInvoiceByIdUseCase } from '../application/find-invoice-by-id.usecase';
 import { UserInvoiceLastMonthUseCase } from '../application/user-invoice-last-month.usecase';
 import { FindInvoicesByUserIdUseCase } from '../application/find-all-invoices-by-user-id.usecase';
+import { FindAllInvoicesUseCase } from '../application/find-all-invoices.usecase';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { FindInvoicesByUserIdUseCase } from '../application/find-all-invoices-by
     FindInvoiceByIdUseCase,
     UserInvoiceLastMonthUseCase,
     FindInvoicesByUserIdUseCase,
+    FindAllInvoicesUseCase,
     MongooseInvoiceRepository,
     {
       provide: InvoiceEntityRepository,
