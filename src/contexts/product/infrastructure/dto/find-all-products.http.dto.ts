@@ -1,15 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { ProductStatus } from '../../domain/product.entity';
 
 export class FindAllProductsHttpDto {
   @ApiProperty({ required: false })
   @IsOptional()
-  limit?: string;
+  @IsString()
+  limit: string = '10';
 
   @ApiProperty({ required: false })
-  @IsOptional()
-  offset?: string;
+  @IsString()
+  offset?: string = '0';
 }
 
 export class FindAllProductsHttpResponseDto {

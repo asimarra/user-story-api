@@ -6,11 +6,13 @@ import { Roles } from '@src/shared/domain/roles.enum';
 export class FindAllHttpDto {
   @ApiProperty({ required: false })
   @IsOptional()
-  limit?: string;
+  @IsString()
+  limit: string = '10';
 
   @ApiProperty({ required: false })
+  @IsOptional()
   @IsString()
-  offset?: string;
+  offset?: string = '0';
 }
 
 export class FindAllHttpResponseDto {
