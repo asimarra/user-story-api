@@ -3,6 +3,7 @@ import { MyInjectable } from '@src/shared/infrastructure/dependency-injection/my
 import { LoginRequest, LoginResponse } from '../domain/login.dto';
 import { TokenService } from '@src/shared/domain/token-service.interface';
 import * as bcrypt from 'bcrypt';
+import { UserStatus } from '@src/contexts/users/domain/user.entity';
 
 @MyInjectable()
 export class LoginUseCase {
@@ -15,6 +16,16 @@ export class LoginUseCase {
     const { email, password } = params;
 
     const userData = await this.userRepository.findByEmail(email);
+
+    if (userData?.status !== UserStatus.ACTIVE) {
+      return {
+        error: true,
+        data: {
+          message: 'User is not active',
+        },
+      };
+    }
+
     if (!userData) {
       return {
         error: true,
